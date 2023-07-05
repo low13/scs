@@ -11,9 +11,11 @@ fn main() {
         io::stdin().read_line(&mut input).unwrap();
 
         let cmd = input.split_whitespace().collect::<Vec<&str>>()[0];
+        let args = input.split_whitespace().skip(1).collect::<Vec<&str>>();
 
         match cmd {
             "exit" => exit(0),
+            "echo" => println!("{}", args.join(" ")),
             _ => println!("Command not found: {}", cmd)
         }
     }
