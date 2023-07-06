@@ -25,11 +25,8 @@ fn main() {
         match cmd.as_str() {
             "exit" => command::exit(),
             "echo" => command::echo(args),
-            "cd" => {
-                if let Err(err) = command::cd(args) {
-                    println!("{}", err);
-                }
-            }
+            "cd" => command::cd(args),
+            "ls" => command::ls(),
             _ => println!("Command not found: {}", cmd)
         }
     }
