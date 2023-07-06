@@ -1,21 +1,35 @@
+use std::env;
 use std::io::{self, Write};
-use std::process::exit;
+mod command;
 
 fn main() {
     println!("SCS System Command Shell 1.0.0");
     loop {
-        print!(">> ");
+        print!("{}> ", env::current_dir().unwrap().display());
         io::stdout().flush().unwrap();
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
 
-        let cmd = input.split_whitespace().collect::<Vec<&str>>()[0];
+        let cmd = {
+            let cmd_opt = input.split_whitespace().next();
+            if cmd_opt.is_none() {
+                continue;
+            }
+            cmd_opt.unwrap().to_owned()
+        };
+        
+
         let args = input.split_whitespace().skip(1).collect::<Vec<&str>>();
 
-        match cmd {
-            "exit" => exit(0),
-            "echo" => println!("{}", args.join(" ")),
+        match cmd.as_str() {
+            "exit" => command::exit(),
+            "echo" => command::echo(args),
+            "cd" => {
+                if let Err(err) = command::cd(args) {
+                    println!("{}", err);
+                }
+            }
             _ => println!("Command not found: {}", cmd)
         }
     }
