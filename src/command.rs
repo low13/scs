@@ -10,7 +10,8 @@ pub fn echo(args: Vec<&str>) {
 }
 
 pub fn cd(args: Vec<&str>) {
-    let path = Path::new(args[0]);
+    let args = args.join(" ");
+    let path = Path::new(&args);
     if let Err(_) = env::set_current_dir(path) {
         println!("Unable to access directory");
     }
@@ -26,5 +27,14 @@ pub fn ls() {
         println!();
     } else {
         println!("Unable to read directory");
+    }
+}
+
+pub fn mkfile(args: Vec<&str>) {
+    let args = args.join(" ");
+    if Path::new(&args).exists() {
+        println!("File '{}' already exists", &args)
+    } else {
+        let _ = fs::File::create(&args);
     }
 }

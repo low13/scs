@@ -3,7 +3,7 @@ use std::io::{self, Write};
 mod command;
 
 fn main() {
-    println!("SCS System Command Shell 1.0.0");
+    println!("SCS System Command Shell 0.1.3");
     loop {
         print!("{}> ", env::current_dir().unwrap().display());
         io::stdout().flush().unwrap();
@@ -27,6 +27,7 @@ fn main() {
             "echo" => command::echo(args),
             "cd" => command::cd(args),
             "ls" => command::ls(),
+            "mkfile" => command::mkfile(args),
             _ => println!("Command not found: {}", cmd)
         }
     }
