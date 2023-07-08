@@ -1,8 +1,14 @@
+use std::io::{self, Write};
 use std::{process, env, fs};
 use std::path::Path;
 
 pub fn exit() {
     process::exit(0);
+}
+
+pub fn clear() {
+    print!("\x1B[2J\x1B[1;0H");
+    io::stdout().flush().unwrap();
 }
 
 pub fn echo(args: Vec<&str>) {
@@ -41,6 +47,11 @@ pub fn mkfile(args: Vec<&str>) {
 }
 
 pub fn rmfile(args: Vec<&str>) {
+    if args.len() == 0 {
+        println!("Expected file");
+        return;
+    }
+
     let args = args.join(" ");
     let path = Path::new(&args);
     if path.exists() && path.is_file() {
@@ -63,6 +74,14 @@ pub fn mkdir(args: Vec<&str>) {
 pub fn rmdir(args: Vec<&str>) {
     let args_temp;
     let mut force = false;
+
+    if args.len() == 0 {
+        println!("Expected directory");
+        return;
+    } else if args.len() == 1 && args[0] == "--force" {
+        println!("Expected directory");
+        return;
+    }
 
     if args[0] == "--force" {
         force = true;
@@ -87,4 +106,57 @@ pub fn rmdir(args: Vec<&str>) {
     } else {
         println!("Unable to find directory '{}'", &args);
     }
+}
+
+pub fn read(args: Vec<&str>) {
+    let args = args.join(" ");
+    let path = Path::new(&args);
+
+    if path.exists() && path.is_file() {
+        println!("{}", fs::read_to_string(path).unwrap());
+    } else {
+        println!("Unable to read file '{}'", &args);
+    }
+}
+
+pub fn copy(args: Vec<&str>) {
+    if args.len() == 0 {
+        println!("Expected source path");
+        return;
+    }
+    if args.len() == 1 {
+        println!("Expected destination path");
+        return;
+    }
+
+    let src_path = Path::new(args[0]);
+    let dest_path = Path::new(args[1]);
+
+    if !src_path.exists() {
+        println!("Unable to find '{}'", src_path.display());
+        return;
+    }
+
+    let _ = fs::copy(src_path, dest_path);
+}
+
+pub fn mv(args: Vec<&str>) {
+    if args.len() == 0 {
+        println!("Expected source path");
+        return;
+    }
+    if args.len() == 1 {
+        println!("Expected destination path");
+        return;
+    }
+
+    let src_path = Path::new(args[0]);
+    let dest_path = Path::new(args[1]);
+
+    if !src_path.exists() {
+        println!("Unable to find '{}'", src_path.display());
+        return;
+    }
+
+    let _ = fs::rename(src_path, dest_path);
 }
