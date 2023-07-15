@@ -37,10 +37,6 @@ pub fn clear() {
     io::stdout().flush().unwrap();
 }
 
-pub fn echo(args: Vec<&str>) {
-    println!("{}", args.join(" "));
-}
-
 pub fn cd(args: Vec<&str>) {
     let args = args.join(" ");
     let path = Path::new(&args);

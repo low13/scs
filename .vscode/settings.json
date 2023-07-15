@@ -1,6 +1,16 @@
 {
     "rust-analyzer.linkedProjects": [
         ".\\Cargo.toml",
-        ".\\commands\\echo\\Cargo.toml"
-    ]
+        ".\\commands\\echo\\Cargo.toml",
+        ".\\commands\\ls\\Cargo.toml",
+        ".\\commands\\clear\\Cargo.toml",
+        ".\\commands\\mkdir\\Cargo.toml",
+        ".\\commands\\mkfile\\Cargo.toml",
+        ".\\commands\\rmfile\\Cargo.toml",
+        ".\\commands\\rmdir\\Cargo.toml",
+        ".\\commands\\read\\Cargo.toml",
+        ".\\commands\\copy\\Cargo.toml",
+        ".\\commands\\mv\\Cargo.toml",
+        ".\\commands\\find\\Cargo.toml"
+    ],
 }
