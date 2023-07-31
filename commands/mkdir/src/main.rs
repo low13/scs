@@ -3,7 +3,7 @@ use std::path::Path;
 use std::env::args;
 
 fn main() {
-    let args = args().collect::<Vec<String>>().join(" ");
+    let args = args().collect::<Vec<String>>()[1..].join(" ");
     let path = Path::new(&args);
     if path.exists() {
         println!("'{}' already exists", &args);

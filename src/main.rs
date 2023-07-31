@@ -1,10 +1,10 @@
 use std::env;
+use std::process;
+use std::path::Path;
 use std::io::{self, Write};
-mod command;
 
 fn main() {
     println!("SCS System Command Shell 1.0.0");
-    println!("Enter 'help' for a list of all commands");
 
     loop {
         print!("{} => ", env::current_dir().unwrap().display());
@@ -26,27 +26,29 @@ fn main() {
             }
             cmd_opt.unwrap().to_owned()
         };
-        
 
         let args = input.split_whitespace().skip(1).collect::<Vec<&str>>();
 
-        match cmd.as_str() {
-            "help" => command::help(),
-            "exit" => command::exit(),
-            "clear" => command::clear(),
-            "echo" => command::echo(args),
-            "cd" => command::cd(args),
-            "ls" => command::ls(),
-            "mkfile" => command::mkfile(args),
-            "rmfile" => command::rmfile(args),
-            "mkdir" => command::mkdir(args),
-            "rmdir" => command::rmdir(args),
-            "read" => command::read(args),
-            "copy" => command::copy(args),
-            "move" => command::mv(args),
-            "find" => command::find(args),
-            "run" => command::run(args),
-            _ => println!("Command not found: {}", cmd)
+        if cmd == "cd" {
+            let args = args.join(" ");
+            let path = Path::new(&args);
+            if let Err(_) = env::set_current_dir(path) {
+                println!("Unable to access directory");
+            }
+        }
+        if cmd == "exit" {
+            process::exit(0);
+        }
+        
+        if Path::new(&cmd).exists() {
+            let _ = process::Command::new(&cmd).args(args).status();
+        } else {
+            let cmd_exe = cmd.to_string() + ".exe";
+            if Path::new(&cmd_exe).exists() {
+                let _ = process::Command::new(&cmd_exe).args(args).status();
+            } else {
+                println!("Command not found: {}", cmd);
+            }
         }
     }
 }

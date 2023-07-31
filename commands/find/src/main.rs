@@ -1,7 +1,7 @@
 use std::env;
 
 fn main() {
-    let args = env::args().collect()[1..];
+    let args = &env::args().collect::<Vec<String>>()[1..];
 
     if args.len() == 0 {
         println!("Usage: find {}", "{file}");
