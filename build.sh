@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mkdir -p "out/commands"
+mkdir -p "out"
 cargo build --release
-mv "target/release/scs.exe" "out"
+mv "target/release/scs.exe" "out" 2>/dev/null
 cd "commands"
 
 for cmd in *; do
@@ -12,6 +12,6 @@ for cmd in *; do
             cmd="move"
         fi
         cargo build --release
-        mv "target/release/$cmd.exe" "../../out/commands"
+        mv "target/release/$cmd.exe" "../../out" 2>/dev/null
     )
 done

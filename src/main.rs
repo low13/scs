@@ -4,10 +4,10 @@ use std::path::Path;
 use std::io::{self, Write};
 
 fn main() {
-    println!("SCS System Command Shell 1.0.0");
+    println!("SCS System Command Shell 1.0.1");
 
     loop {
-        print!("{} => ", env::current_dir().unwrap().display());
+        print!("{} >> ", env::current_dir().unwrap().display());
         io::stdout().flush().unwrap();
 
         let mut input = String::new();
@@ -40,15 +40,27 @@ fn main() {
             process::exit(0);
         }
         
-        if Path::new(&cmd).exists() {
+        if exists(&cmd) {
             let _ = process::Command::new(&cmd).args(args).status();
         } else {
             let cmd_exe = cmd.to_string() + ".exe";
-            if Path::new(&cmd_exe).exists() {
+            if exists(&cmd_exe) {
                 let _ = process::Command::new(&cmd_exe).args(args).status();
             } else {
                 println!("Command not found: {}", cmd);
             }
         }
     }
+}
+
+fn exists(cmd: &str) -> bool {
+    if let Some(paths) = env::var_os("PATH") {
+        let paths = env::split_paths(&paths);
+        for path in paths {
+            if path.join(cmd).exists() {
+                return true;
+            }
+        }
+    }
+    Path::new(cmd).exists() || cmd == "exit" || cmd == "cd"
 }

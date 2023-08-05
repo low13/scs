@@ -1,6 +1,6 @@
 @echo off
 
-mkdir "out\commands"
+mkdir "out"
 cargo build --release
 move "target\release\scs.exe" "out\"
 cd "commands"
@@ -10,10 +10,12 @@ for /D %%i in (*) do (
     cargo build --release
 
     if /I "%%i"=="mv" (
-        move "target\release\move.exe" "..\..\out\commands\"
+        move "target\release\move.exe" "..\..\out\"
     ) else (
-        move "target\release\%%i.exe" "..\..\out\commands\"
+        move "target\release\%%i.exe" "..\..\out\"
     )
 
     cd ..
 )
+
+cd ..
